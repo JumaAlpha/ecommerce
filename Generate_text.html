@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate and Save Text Document</title>
+</head>
+<body>
+
+    <button onclick="generateAndSaveTextFile()">Generate & Save Document</button>
+    <button onclick="readFile()">Read & Display Document</button>
+
+    <div id="output"></div>
+
+    <script>
+        function generateAndSaveTextFile() {
+            const textContent = `
+                Order 1: 3x Apple
+                Order 2: 2x Banana
+                Order 3: 5x Orange
+            `;
+
+            const blob = new Blob([textContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'orders.txt';
+
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function readFile() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.txt';
+
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    document.getElementById('output').innerText = content;
+                };
+
+                reader.readAsText(file);
+            };
+
+            input.click();
+        }
+    </script>
+
+</body>
+</html>
